@@ -37,7 +37,7 @@ import traceback
 from pprint import pprint
 
 
-class WeiBoScraper:
+class WeiBoScraper(object):
 
     def __init__(self, uuid, filter_flag=0):
         self._init_cookies()
@@ -93,7 +93,7 @@ class WeiBoScraper:
 
     def _get_html(self):
         try:
-            url = 'http://weibo.cn/u/%d?filter=%d&page=1' % (self.user_id, self.filter)
+            url = 'http://weibo.cn/u/%s?filter=%s&page=1' % (self.user_id, self.filter)
             print(url)
             self.html = requests.get(url, cookies=self.cookie, headers=self.headers).content
             pprint(self.html)

@@ -28,8 +28,8 @@ def parse_args():
     help_ = 'set user id.'
     parser.add_argument('-i', '--id', default='twitter', help=help_)
 
-    help_ = 'set weibo filter flag. if filter is 1, then weibo are all original,' \
-            ' if 0, weibo contains repost one. default is 1.'
+    help_ = 'set weibo filter flag. if filter is 0, then weibo are all original,' \
+            ' if 1, weibo contains repost one. default is 0.'
     parser.add_argument('-f', '--filter', default='1', help=help_)
 
     help_ = 'debug mode for develop. set 1 on, set 0 off.'
@@ -49,7 +49,7 @@ if __name__ == '__main__':
             if not args.filter:
                 filter_flag = args.filter
             else:
-                filter_flag = 1
+                filter_flag = 0
             print('[debug mode] crawling weibo from id {}'.format(uid))
             dispatcher = Dispatcher(id_file_path=None, mode='single', uid=uid, filter_flag=filter_flag)
             dispatcher.execute()
@@ -59,7 +59,7 @@ if __name__ == '__main__':
             if not args.filter:
                 filter_flag = args.filter
             else:
-                filter_flag = 1
+                filter_flag = 0
             print('crawling weibo from id {}'.format(uid))
             dispatcher = Dispatcher(id_file_path=None, mode='single', uid=uid, filter_flag=filter_flag)
             dispatcher.execute()
@@ -69,7 +69,7 @@ if __name__ == '__main__':
             if not args.filter:
                 filter_flag = args.filter
             else:
-                filter_flag = 1
+                filter_flag = 0
             print('crawling weibo from id {}'.format(uid))
             dispatcher = Dispatcher(id_file_path='./id_file', mode='multi', uid=None, filter_flag=filter_flag)
             dispatcher.execute()

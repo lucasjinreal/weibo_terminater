@@ -21,7 +21,7 @@ from scraper.weibo_scraper import WeiBoScraper
 
 class Dispatcher(object):
 
-    def __init__(self, id_file_path, mode, uid, filter_flag=1):
+    def __init__(self, id_file_path, mode, uid, filter_flag=0):
         self.mode = mode
         self.filter_flag = filter_flag
 
@@ -41,6 +41,6 @@ class Dispatcher(object):
         pass
 
     @staticmethod
-    def execute(self, user_id, filter_flag):
+    def execute(user_id, filter_flag):
         scraper = WeiBoScraper(uuid=user_id, filter_flag=filter_flag)
         scraper.crawl()
