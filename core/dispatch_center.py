@@ -21,5 +21,26 @@ from scraper.weibo_scraper import WeiBoScraper
 
 class Dispatcher(object):
 
-    def __init__(self):
+    def __init__(self, id_file_path, mode, uid, filter_flag=1):
+        self.mode = mode
+
+        if self.mode == 'single':
+            self.user_id = uid
+            self._init_single_mode()
+        elif self.mode == 'multi':
+            self.id_file_path = id_file_path
+            self._init_multi_mode()
+        else:
+            raise 'mode option only support single and multi'
+        self.filter_flag = filter_flag
+
+    def _init_single_mode(self):
+        self.execute(self.user_id, self.filter_flag)
+
+    def _init_multi_mode(self):
         pass
+
+    @staticmethod
+    def execute(self, user_id, filter_flag):
+        scraper = WeiBoScraper(uuid=user_id, filter_flag=filter_flag)
+        scraper.crawl()
