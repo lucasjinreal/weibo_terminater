@@ -75,8 +75,7 @@ class WeiBoScraper(object):
         """
         headers = requests.utils.default_headers()
         user_agent = {
-            'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, '
-                          'like Gecko) Chrome/57.0.2987.133 Mobile Safari/537.36'
+            'User-Agent': 'Mozilla/5.0 (Windows NT 5.1; rv:11.0) Gecko/20100101 Firefox/11.0'
         }
         headers.update(user_agent)
         print('headers: ', headers)
@@ -96,7 +95,6 @@ class WeiBoScraper(object):
             url = 'http://weibo.cn/u/%s?filter=%s&page=1' % (self.user_id, self.filter)
             print(url)
             self.html = requests.get(url, cookies=self.cookie, headers=self.headers).content
-            pprint(self.html)
             print('success load html..')
         except Exception as e:
             print(e)
@@ -141,7 +139,7 @@ class WeiBoScraper(object):
 
         # traverse all weibo, and we will got weibo detail urls
         for page in range(1, page_num + 1):
-            url2 = 'http://weibo.cn/u/%d?filter=%d&page=%d' % (self.user_id, self.filter, page)
+            url2 = 'http://weibo.cn/u/%s?filter=%s&page=%s' % (self.user_id, self.filter, page)
             html2 = requests.get(url2, cookies=self.cookie, headers=self.headers).content
             selector2 = etree.HTML(html2)
             info = selector2.xpath("//div[@class='c']")
@@ -247,7 +245,7 @@ class WeiBoScraper(object):
             f = open("weibo/%s.txt" % self.user_id, "w")
             f.write(result)
             f.close()
-            file_path = os.getcwd() + "\weibo" + "\%d" % self.user_id + ".txt"
+            file_path = os.getcwd() + "\weibo" + "\%s" % self.user_id + ".txt"
             print('微博写入文件完毕，保存路径%s' % file_path)
 
         except Exception as e:
