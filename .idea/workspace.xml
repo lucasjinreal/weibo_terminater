@@ -20,8 +20,8 @@
       <file leaf-file-name="weibo_scraper.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/scraper/weibo_scraper.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="645">
-              <caret line="100" column="0" lean-forward="true" selection-start-line="100" selection-start-column="0" selection-end-line="100" selection-end-column="0" />
+            <state relative-caret-position="630">
+              <caret line="227" column="54" lean-forward="true" selection-start-line="227" selection-start-column="54" selection-end-line="227" selection-end-column="54" />
               <folding>
                 <element signature="e#1012#1050#0" expanded="true" />
               </folding>
@@ -589,8 +589,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/scraper/weibo_scraper.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="645">
-          <caret line="100" column="0" lean-forward="true" selection-start-line="100" selection-start-column="0" selection-end-line="100" selection-end-column="0" />
+        <state relative-caret-position="630">
+          <caret line="227" column="54" lean-forward="true" selection-start-line="227" selection-start-column="54" selection-end-line="227" selection-end-column="54" />
           <folding>
             <element signature="e#1012#1050#0" expanded="true" />
           </folding>

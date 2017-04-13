@@ -205,27 +205,32 @@ class WeiBoScraper(object):
 
                     # we crawl from page 2, cause front pages have some noise
                     detail_comment_url = url + '&page=' + str(page + 2)
-                    # from every detail comment url we will got all comment
-                    html_detail_page = requests.get(detail_comment_url, cookies=self.cookie).content
-                    selector_comment = etree.HTML(html_detail_page)
+                    try:
+                        # from every detail comment url we will got all comment
+                        html_detail_page = requests.get(detail_comment_url, cookies=self.cookie).content
+                        selector_comment = etree.HTML(html_detail_page)
 
-                    comment_div_element = selector_comment.xpath('//div[starts-with(@id, "C_")]')
+                        comment_div_element = selector_comment.xpath('//div[starts-with(@id, "C_")]')
 
-                    for child in comment_div_element:
-                        single_comment_user_name = child.xpath('a[1]/text()')[0]
-                        if child.xpath('span[1][count(*)=0]'):
-                            single_comment_content = child.xpath('span[1][count(*)=0]/text()')[0]
-                        else:
-                            span_element = child.xpath('span[1]')[0]
-                            at_user_name = span_element.xpath('a/text()')[0]
-                            at_user_name = '$' + at_user_name.split('@')[-1] + '$'
-                            single_comment_content = span_element.xpath('/text()')
-                            single_comment_content.insert(1, at_user_name)
-                            single_comment_content = ' '.join(single_comment_content)
+                        for child in comment_div_element:
+                            single_comment_user_name = child.xpath('a[1]/text()')[0]
+                            if child.xpath('span[1][count(*)=0]'):
+                                single_comment_content = child.xpath('span[1][count(*)=0]/text()')[0]
+                            else:
+                                span_element = child.xpath('span[1]')[0]
+                                at_user_name = span_element.xpath('a/text()')[0]
+                                at_user_name = '$' + at_user_name.split('@')[-1] + '$'
+                                single_comment_content = span_element.xpath('/text()')
+                                single_comment_content.insert(1, at_user_name)
+                                single_comment_content = ' '.join(single_comment_content)
 
-                        full_single_comment = '<'+single_comment_user_name+'>' + ': ' + single_comment_content
-                        print(full_single_comment)
-                        f.writelines(full_single_comment + '\n')
+                            full_single_comment = '<' + single_comment_user_name + '>' + ': ' + single_comment_content
+                            print(full_single_comment)
+                            f.writelines(full_single_comment + '\n')
+                    except etree.XMLSyntaxError as e:
+                        print('-*20')
+                        print('user id {} all done!'.format(self.user_id))
+                        print('all weibo content and comments saved into {}'.format(weibo_comments_save_path))
                 f.writelines('F\n')
 
     def write_text(self):
