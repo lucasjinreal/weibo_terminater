@@ -46,7 +46,7 @@ if __name__ == '__main__':
             print('debug mode not support specific id.')
         else:
             uid = DEFAULT_USER_ID
-            if not args.fileter_flag:
+            if not args.filter_flag:
                 filter_flag = args.filter
             else:
                 filter_flag = 1
@@ -56,7 +56,7 @@ if __name__ == '__main__':
     elif args.debug == '0':
         if not args.id:
             uid = args.id
-            if not args.fileter_flag:
+            if not args.filter_flag:
                 filter_flag = args.filter
             else:
                 filter_flag = 1
@@ -66,7 +66,7 @@ if __name__ == '__main__':
 
         else:
             uid = DEFAULT_USER_ID
-            if not args.fileter_flag:
+            if not args.filter_flag:
                 filter_flag = args.filter
             else:
                 filter_flag = 1
