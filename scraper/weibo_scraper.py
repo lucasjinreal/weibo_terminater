@@ -29,11 +29,8 @@ cookies into cookies file just beside this directory
 from __future__ import absolute_import
 from __future__ import print_function
 import re
-import string
 import sys
 import os
-import urllib
-from bs4 import BeautifulSoup
 import requests
 from lxml import etree
 import traceback
