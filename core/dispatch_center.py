@@ -23,6 +23,7 @@ class Dispatcher(object):
 
     def __init__(self, id_file_path, mode, uid, filter_flag=1):
         self.mode = mode
+        self.filter_flag = filter_flag
 
         if self.mode == 'single':
             self.user_id = uid
@@ -32,8 +33,7 @@ class Dispatcher(object):
             self._init_multi_mode()
         else:
             raise 'mode option only support single and multi'
-        self.filter_flag = filter_flag
-
+      
     def _init_single_mode(self):
         self.execute(self.user_id, self.filter_flag)
 
