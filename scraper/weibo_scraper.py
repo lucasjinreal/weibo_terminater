@@ -183,10 +183,11 @@ class WeiBoScraper(object):
         to get all weibo details and get all comments.
         :return:
         """
-        weibo_comments_save_path = './weibo_detail/{}.txt'.format(self.user_id)
+        weibo_comments_save_path = './weibo_detail/'
+        weibo_comments_save_name = '{}.txt'.format(self.user_id)
         if not os.path.exists(weibo_comments_save_path):
-            os.makedirs(os.path.dirname(weibo_comments_save_path))
-        with open(weibo_comments_save_path, 'w+') as f:
+            os.makedirs(weibo_comments_save_path)
+        with open(os.path.join(weibo_comments_save_path, weibo_comments_save_name), 'w+') as f:
             for i, url in enumerate(self.weibo_detail_urls):
                 print('solving weibo detail from {}'.format(url))
                 html_detail = requests.get(url, cookies=self.cookie, headers=self.headers).content
