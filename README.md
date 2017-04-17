@@ -1,7 +1,7 @@
 ![PicName](http://ofwzcunzi.bkt.clouddn.com/j1Pdjm2viQOSCU52.png)
 # 2017-4-19 重磅更新！！！启动微博终结者计划(WT Plan)
 
-** weibo_terminator ** 微博终结者爬虫基本上准备就绪：
+**weibo_terminator** 微博终结者爬虫基本上准备就绪：
 
 这次我们更新了以下功能：
 * 增加了延时策略，每次爬取10个页面，暂停五分钟，这样依旧不能百分百保证账号不被ban，但是我们还有策略！！
