@@ -25,6 +25,7 @@ PhantomJS, from http://phantomjs.org/download.html
 import os
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import InvalidElementStateException
 import time
 import sys
 from tqdm import *
@@ -55,36 +56,45 @@ def get_cookie_from_network(account_id, account_password):
         driver.find_element_by_xpath('//input[@id="loginName"]').send_keys(account_id)
         driver.find_element_by_xpath('//input[@id="loginPassword"]').send_keys(account_password)
         # driver.find_element_by_xpath('//input[@id="loginPassword"]').send_keys(Keys.RETURN)
-        print('account id: {}'.format(accounts[0]['id']))
-        print('account password: {}'.format(accounts[0]['password']))
+        print('account id: {}'.format(account_id))
+        print('account password: {}'.format(account_password))
 
         driver.find_element_by_xpath('//a[@id="loginAction"]').click()
+
         try:
             cookie_list = driver.get_cookies()
             cookie_string = ''
             for cookie in cookie_list:
                 if 'name' in cookie and 'value' in cookie:
                     cookie_string += cookie['name'] + '=' + cookie['value'] + ';'
-            print('success get cookies!! \n {}'.format(cookie_string))
-            if os.path.exists(COOKIES_SAVE_PATH):
-                with open(COOKIES_SAVE_PATH, 'rb') as f:
-                    cookies_dict = pickle.load(f)
-                if cookies_dict[account_id] is not None:
+            if 'SSOLoginState' in cookie_string:
+                print('success get cookies!! \n {}'.format(cookie_string))
+                if os.path.exists(COOKIES_SAVE_PATH):
+                    with open(COOKIES_SAVE_PATH, 'rb') as f:
+                        cookies_dict = pickle.load(f)
+                    if cookies_dict[account_id] is not None:
+                        cookies_dict[account_id] = cookie_string
+                        with open(COOKIES_SAVE_PATH, 'wb') as f:
+                            pickle.dump(cookies_dict, f)
+                        print('successfully save cookies into {}. \n'.format(COOKIES_SAVE_PATH))
+                    else:
+                        pass
+                else:
+                    cookies_dict = dict()
                     cookies_dict[account_id] = cookie_string
                     with open(COOKIES_SAVE_PATH, 'wb') as f:
                         pickle.dump(cookies_dict, f)
-                    print('successfully save cookies into {}'.format(COOKIES_SAVE_PATH))
-                else:
-                    pass
+                    print('successfully save cookies into {}. \n'.format(COOKIES_SAVE_PATH))
+                return cookie_string
             else:
-                cookies_dict = dict()
-                cookies_dict[account_id] = cookie_string
-                with open(COOKIES_SAVE_PATH, 'wb') as f:
-                    pickle.dump(cookies_dict, f)
-                print('successfully save cookies into {}'.format(COOKIES_SAVE_PATH))
-            return cookie_string
+                print('error, account id {} is not valid, pass this account, you can edit it and then '
+                      'update cookies. \n'
+                      .format(account_id))
+                pass
+
         except Exception as e:
             print(e)
+
     else:
         print('can not find PhantomJS driver, please download from http://phantomjs.org/download.html based on your '
               'system.')

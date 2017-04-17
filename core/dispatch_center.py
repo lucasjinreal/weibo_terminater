@@ -60,15 +60,17 @@ class Dispatcher(object):
         :return:
         """
         if self.update_cookies:
-            for k, v in accounts:
-                get_cookie_from_network(k, v)
-            print('all accounts updated cookies finished. starting scrap..')
+            for account in accounts:
+                print('preparing cookies for account {}'.format(account))
+                get_cookie_from_network(account['id'], account['password'])
+            print('all accounts getting cookies finished. starting scrap..')
         else:
             if os.path.exists(COOKIES_SAVE_PATH):
                 pass
             else:
-                for k, v in accounts:
-                    get_cookie_from_network(k, v)
+                for account in accounts:
+                    print('preparing cookies for account {}'.format(account))
+                    get_cookie_from_network(account['id'], account['password'])
                 print('all accounts getting cookies finished. starting scrap..')
 
     def _init_accounts(self):

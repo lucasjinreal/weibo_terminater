@@ -123,7 +123,8 @@ class WeiBoScraper(object):
             print('current user name is: {}'.format(self.user_name))
         except Exception as e:
             print(e)
-            print('html not properly loaded, maybe cookies out of date.')
+            print('html not properly loaded, maybe cookies out of date or account being banned. '
+                  'change an account please')
             exit()
 
     def _get_user_info(self):
