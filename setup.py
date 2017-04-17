@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# file: config.py
+# file: setup.py
 # author: JinTian
-# time: 13/04/2017 10:10 AM
+# time: 17/04/2017 2:25 PM
 # Copyright 2017 JinTian. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,5 +16,3 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ------------------------------------------------------------------------
-
-DEFAULT_USER_ID = '1669879400'

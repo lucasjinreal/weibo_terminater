@@ -18,16 +18,15 @@
 # ------------------------------------------------------------------------
 """
 using guide:
-get your cookies first, from:
+setting accounts first:
 
-https://passport.weibo.cn/signin/login
+under: weibo_terminator/settings/accounts.py
+you can set more than one accounts, WT will using all accounts one by one,
+if one banned, another will move on.
 
-open your browser inspect tools and click m.weibo.cn you can get Headers->RequestHeaders and copy
-cookies into cookies file just beside this directory
+if you care about security, using subsidiary accounts instead.
 
 """
-from __future__ import absolute_import
-from __future__ import print_function
 import re
 import sys
 import os
@@ -35,38 +34,48 @@ import requests
 from lxml import etree
 import traceback
 from pprint import pprint
+from settings.config import COOKIES_SAVE_PATH
+import pickle
+import time
 
 
 class WeiBoScraper(object):
 
-    def __init__(self, uuid, filter_flag=0):
+    def __init__(self, using_account, uuid, filter_flag=0):
+        """
+        uuid user id, filter flag indicates weibo type
+        :param uuid:
+        :param filter_flag:
+        """
+        self.using_account = using_account
         self._init_cookies()
         self._init_headers()
 
-        self.user_id = uuid  # 用户id，即需要我们输入的数字，如昵称为“Dear-迪丽热巴”的id为1669879400
-        self.filter = filter_flag  # 取值范围为0、1，程序默认值为0，代表要爬取用户的全部微博，1代表只爬取用户的原创微博
-        self.user_name = ''  # 用户名，如“Dear-迪丽热巴”
-        self.weibo_num = 0  # 用户全部微博数
-        self.weibo_scraped = 0  # 爬取到的微博数
-        self.following = 0  # 用户关注数
-        self.followers = 0  # 用户粉丝数
-        self.weibo_content = []  # 微博内容
-        self.num_zan = []  # 微博对应的点赞数
-        self.num_forwarding = []  # 微博对应的转发数
-        self.num_comment = []  # 微博对应的评论数
+        self.user_id = uuid
+        self.filter = filter_flag
+        self.user_name = ''
+        self.weibo_num = 0
+        self.weibo_scraped = 0
+        self.following = 0
+        self.followers = 0
+        self.weibo_content = []
+        self.num_zan = []
+        self.num_forwarding = []
+        self.num_comment = []
         self.weibo_detail_urls = []
 
     def _init_cookies(self):
         try:
-            with open('./cookies', 'r') as f:
-                cookies_string = f.readline()
+            with open(COOKIES_SAVE_PATH, 'rb') as f:
+                cookies_dict = pickle.load(f)
+            cookies_string = cookies_dict[self.using_account]
             cookie = {
                 "Cookie": cookies_string
             }
             print('setting cookies..')
             self.cookie = cookie
         except FileNotFoundError:
-            print('please save your cookies into cookies file')
+            print('have not get cookies yet.')
 
     def _init_headers(self):
         """
@@ -82,13 +91,20 @@ class WeiBoScraper(object):
         self.headers = headers
 
     def crawl(self):
-        self._get_html()
-        self._get_user_name()
-        self._get_user_info()
-        self._get_weibo_info()
-        self._get_weibo_detail_comment()
-        print('weibo scrap done!')
-        print('-'*30)
+        # this is the most time-cost part, we have to catch errors, return to dispatch center
+        try:
+            self._get_html()
+            self._get_user_name()
+            self._get_user_info()
+            self._get_weibo_info()
+            self._get_weibo_detail_comment()
+            print('weibo scrap done!')
+            print('-' * 30)
+            return True
+        except Exception as e:
+            print(e)
+            print('current account being banned, return to dispatch center, resign for new account..')
+            return False
 
     def _get_html(self):
         try:
@@ -104,6 +120,7 @@ class WeiBoScraper(object):
         try:
             selector = etree.HTML(self.html)
             self.user_name = selector.xpath('//table//div[@class="ut"]/span[1]/text()')[0]
+            print('current user name is: {}'.format(self.user_name))
         except Exception as e:
             print(e)
             print('html not properly loaded, maybe cookies out of date.')
@@ -127,55 +144,69 @@ class WeiBoScraper(object):
         str_fs = selector.xpath("//div[@class='tip2']/a/text()")[1]
         guid = re.findall(pattern, str_fs, re.M)
         self.followers = int(guid[0])
+        print('current user all weibo num {}, following {}, followers {}'.format(self.weibo_num, self.following,
+                                                                                 self.followers))
 
     def _get_weibo_info(self):
         print('-- getting weibo info')
         selector = etree.HTML(self.html)
-        if selector.xpath('//input[@name="mp"]') is None:
-            page_num = 1
-        else:
-            page_num = int(selector.xpath('//input[@name="mp"]')[0].attrib['value'])
-        pattern = r"\d+\.?\d*"
+        try:
+            if selector.xpath('//input[@name="mp"]') is None:
+                page_num = 1
+            else:
+                page_num = int(selector.xpath('//input[@name="mp"]')[0].attrib['value'])
+            pattern = r"\d+\.?\d*"
+            print('--- all weibo page {}'.format(page_num))
 
-        # traverse all weibo, and we will got weibo detail urls
-        for page in range(1, page_num + 1):
-            url2 = 'http://weibo.cn/u/%s?filter=%s&page=%s' % (self.user_id, self.filter, page)
-            html2 = requests.get(url2, cookies=self.cookie, headers=self.headers).content
-            selector2 = etree.HTML(html2)
-            info = selector2.xpath("//div[@class='c']")
+            try:
+                # traverse all weibo, and we will got weibo detail urls
+                # TODO: inside for loop must set sleep avoid banned by official.
+                for page in range(1, page_num):
+                    url2 = 'http://weibo.cn/u/%s?filter=%s&page=%s' % (self.user_id, self.filter, page)
+                    html2 = requests.get(url2, cookies=self.cookie, headers=self.headers).content
+                    selector2 = etree.HTML(html2)
+                    info = selector2.xpath("//div[@class='c']")
+                    print('---- current solving page {}'.format(page))
 
-            if len(info) > 3:
-                for i in range(0, len(info) - 2):
+                    if page % 10 == 0:
+                        print('[ATTEMPTING] rest for 5 minutes to cheat weibo site, avoid being banned.')
+                        time.sleep(60*5)
 
-                    detail = info[i].xpath("@id")[0]
-                    self.weibo_detail_urls.append('http://weibo.cn/comment/{}?uid={}&rl=0'.
-                                                  format(detail.split('_')[-1], self.user_id))
+                    if len(info) > 3:
+                        for i in range(0, len(info) - 2):
+                            detail = info[i].xpath("@id")[0]
+                            self.weibo_detail_urls.append('http://weibo.cn/comment/{}?uid={}&rl=0'.
+                                                          format(detail.split('_')[-1], self.user_id))
 
-                    self.weibo_scraped += 1
-                    str_t = info[i].xpath("div/span[@class='ctt']")
-                    weibos = str_t[0].xpath('string(.)')
-                    self.weibo_content.append(weibos)
-                    print(weibos)
+                            self.weibo_scraped += 1
+                            str_t = info[i].xpath("div/span[@class='ctt']")
+                            weibos = str_t[0].xpath('string(.)')
+                            self.weibo_content.append(weibos)
+                            print(weibos)
 
-                    str_zan = info[i].xpath("div/a/text()")[-4]
-                    guid = re.findall(pattern, str_zan, re.M)
-                    num_zan = int(guid[0])
-                    self.num_zan.append(num_zan)
+                            str_zan = info[i].xpath("div/a/text()")[-4]
+                            guid = re.findall(pattern, str_zan, re.M)
+                            num_zan = int(guid[0])
+                            self.num_zan.append(num_zan)
 
-                    forwarding = info[i].xpath("div/a/text()")[-3]
-                    guid = re.findall(pattern, forwarding, re.M)
-                    num_forwarding = int(guid[0])
-                    self.num_forwarding.append(num_forwarding)
+                            forwarding = info[i].xpath("div/a/text()")[-3]
+                            guid = re.findall(pattern, forwarding, re.M)
+                            num_forwarding = int(guid[0])
+                            self.num_forwarding.append(num_forwarding)
 
-                    comment = info[i].xpath("div/a/text()")[-2]
-                    guid = re.findall(pattern, comment, re.M)
-                    num_comment = int(guid[0])
-                    self.num_comment.append(num_comment)
-        if self.filter == 0:
-            print('共' + str(self.weibo_scraped) + '条微博')
+                            comment = info[i].xpath("div/a/text()")[-2]
+                            guid = re.findall(pattern, comment, re.M)
+                            num_comment = int(guid[0])
+                            self.num_comment.append(num_comment)
+            except etree.XMLSyntaxError as e:
+                print('get weibo info finished.')
+            if self.filter == 0:
+                print('共' + str(self.weibo_scraped) + '条微博')
 
-        else:
-            print('共' + str(self.weibo_num) + '条微博，其中' + str(self.weibo_scraped) + '条为原创微博')
+            else:
+                print('共' + str(self.weibo_num) + '条微博，其中' + str(self.weibo_scraped) + '条为原创微博')
+        except IndexError as e:
+            print('get weibo info done, current user {} has no weibo yet.'.format(self.user_id))
 
     def _get_weibo_detail_comment(self):
         """
@@ -202,6 +233,10 @@ class WeiBoScraper(object):
                 f.writelines('E\n')
                 f.writelines('F\n')
                 for page in range(int(all_comment_pages) - 2):
+
+                    if page % 10 == 0:
+                        print('[ATTEMPTING] rest for 5 minutes to cheat weibo site, avoid being banned.')
+                        time.sleep(60*5)
 
                     # we crawl from page 2, cause front pages have some noise
                     detail_comment_url = url + '&page=' + str(page + 2)
@@ -232,6 +267,10 @@ class WeiBoScraper(object):
                         print('user id {} all done!'.format(self.user_id))
                         print('all weibo content and comments saved into {}'.format(weibo_comments_save_path))
                 f.writelines('F\n')
+
+    def switch_account(self, new_account):
+        assert new_account.isinstance(str), 'account must be string'
+        self.using_account = new_account
 
     def write_text(self):
         try:
