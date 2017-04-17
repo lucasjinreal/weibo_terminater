@@ -24,6 +24,7 @@ weibo_terminator authors可以获取。
 不是别的原因，拿那些库构建的项目缺乏灵活性，我们不太喜欢。希望大家理解。
 
 最后依旧欢迎大家submit issue，我们永远开源，维护更新！！
+![automaticaly dispatch multi account](http://ofwzcunzi.bkt.clouddn.com/lPyRH7HuvBe1UE6g.png)
 
 Contribution tips：
 

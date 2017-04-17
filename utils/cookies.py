@@ -36,7 +36,7 @@ from settings.config import LOGIN_URL, PHANTOM_JS_PATH, COOKIES_SAVE_PATH
 
 
 def count_time():
-    for i in tqdm(range(30)):
+    for i in tqdm(range(40)):
         time.sleep(0.5)
 
 
@@ -44,22 +44,28 @@ def get_cookie_from_network(account_id, account_password):
     url_login = LOGIN_URL
     phantom_js_driver_file = os.path.abspath(PHANTOM_JS_PATH)
     if os.path.exists(phantom_js_driver_file):
-        print('loading PhantomJS from {}'.format(phantom_js_driver_file))
-        driver = webdriver.PhantomJS(phantom_js_driver_file)
-        # must set window size or will not find element
-        driver.set_window_size(1640, 688)
-        driver.get(url_login)
-        # before get element sleep for 4 seconds, waiting for page render complete.
-        print('opening weibo login page, this is first done for prepare for cookies. be patience to waite load '
-              'completely.')
-        count_time()
-        driver.find_element_by_xpath('//input[@id="loginName"]').send_keys(account_id)
-        driver.find_element_by_xpath('//input[@id="loginPassword"]').send_keys(account_password)
-        # driver.find_element_by_xpath('//input[@id="loginPassword"]').send_keys(Keys.RETURN)
-        print('account id: {}'.format(account_id))
-        print('account password: {}'.format(account_password))
+        try:
+            print('loading PhantomJS from {}'.format(phantom_js_driver_file))
+            driver = webdriver.PhantomJS(phantom_js_driver_file)
+            # must set window size or will not find element
+            driver.set_window_size(1640, 688)
+            driver.get(url_login)
+            # before get element sleep for 4 seconds, waiting for page render complete.
+            print('opening weibo login page, this is first done for prepare for cookies. be patience to waite load '
+                  'complete.')
+            count_time()
+            driver.find_element_by_xpath('//input[@id="loginName"]').send_keys(account_id)
+            driver.find_element_by_xpath('//input[@id="loginPassword"]').send_keys(account_password)
+            # driver.find_element_by_xpath('//input[@id="loginPassword"]').send_keys(Keys.RETURN)
+            print('account id: {}'.format(account_id))
+            print('account password: {}'.format(account_password))
 
-        driver.find_element_by_xpath('//a[@id="loginAction"]').click()
+            driver.find_element_by_xpath('//a[@id="loginAction"]').click()
+        except InvalidElementStateException as e:
+            print(e)
+            print('error, account id {} is not valid, pass this account, you can edit it and then '
+                  'update cookies. \n'
+                  .format(account_id))
 
         try:
             cookie_list = driver.get_cookies()
