@@ -37,6 +37,7 @@ from pprint import pprint
 from settings.config import COOKIES_SAVE_PATH
 import pickle
 import time
+from utils.string import is_number
 
 
 class WeiBoScraper(object):
@@ -108,8 +109,12 @@ class WeiBoScraper(object):
 
     def _get_html(self):
         try:
-            url = 'http://weibo.cn/u/%s?filter=%s&page=1' % (self.user_id, self.filter)
-            print(url)
+            if is_number(self.user_id):
+                url = 'http://weibo.cn/u/%s?filter=%s&page=1' % (self.user_id, self.filter)
+                print(url)
+            else:
+                url = 'http://weibo.cn/%s?filter=%s&page=1' % (self.user_id, self.filter)
+                print(url)
             self.html = requests.get(url, cookies=self.cookie, headers=self.headers).content
             print('success load html..')
         except Exception as e:

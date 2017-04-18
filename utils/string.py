@@ -24,3 +24,12 @@ def is_valid_id(s):
         return True
     except ValueError as e:
         return False
+
+
+def is_number(s):
+    try:
+        a = float(s)
+        return True
+    except ValueError as e:
+        return False
+
