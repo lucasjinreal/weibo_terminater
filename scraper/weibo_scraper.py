@@ -168,7 +168,7 @@ class WeiBoScraper(object):
                 # traverse all weibo, and we will got weibo detail urls
                 # TODO: inside for loop must set sleep avoid banned by official.
                 for page in range(1, page_num):
-                    url2 = 'http://weibo.cn/u/%s?filter=%s&page=%s' % (self.user_id, self.filter, page)
+                    url2 = 'http://weibo.cn/%s?filter=%s&page=%s' % (self.user_id, self.filter, page)
                     html2 = requests.get(url2, cookies=self.cookie, headers=self.headers).content
                     selector2 = etree.HTML(html2)
                     info = selector2.xpath("//div[@class='c']")
