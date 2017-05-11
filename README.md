@@ -1,4 +1,10 @@
 ![PicName](http://ofwzcunzi.bkt.clouddn.com/j1Pdjm2viQOSCU52.png)
+
+# 迟来的更新
+
+这个项目从发起到现在过去了二十多天，五百年了终于得把事情真真正正干起来了！！这个项目会一直保持更新，为了方便contribute一起贡献，我重新发起了一个项目：https://github.com/jinfagang/weibo_terminator_workflow.git ， 如果想一起贡献爬取语料可以同时star一下workflow这个项目，如果想play with微博爬虫可以继续关注这个项目。
+
+
 # 2017-4-19 重磅更新！！！启动微博终结者计划(WT Plan)
 
 **weibo_terminator** 微博终结者爬虫基本上准备就绪：
