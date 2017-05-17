@@ -17,16 +17,17 @@
 # limitations under the License.
 # ------------------------------------------------------------------------
 import argparse
+
 from core.dispatch_center import Dispatcher
-from utils.config import DEFAULT_USER_ID
-import os
+from settings.config import DEFAULT_USER_ID
+from utils.string import is_valid_id
 
 
 def parse_args():
     parser = argparse.ArgumentParser(description='WeiBo Terminator. Jin Fagang')
 
-    help_ = 'set user id.'
-    parser.add_argument('-i', '--id', default='twitter', help=help_)
+    help_ = 'set user id. or if_file contains multi ids.'
+    parser.add_argument('-i', '--id', default=DEFAULT_USER_ID, help=help_)
 
     help_ = 'set weibo filter flag. if filter is 0, then weibo are all original,' \
             ' if 1, weibo contains repost one. default is 0.'
@@ -42,10 +43,10 @@ def parse_args():
 if __name__ == '__main__':
     args = parse_args()
     if args.debug == '1':
-        if not args.id:
-            print('debug mode not support specific id.')
+        uid = args.id
+        if not '/' or '\\' in uid:
+            print('debug mode not support id file.')
         else:
-            uid = DEFAULT_USER_ID
             if not args.filter:
                 filter_flag = args.filter
             else:
@@ -54,8 +55,8 @@ if __name__ == '__main__':
             dispatcher = Dispatcher(id_file_path=None, mode='single', uid=uid, filter_flag=filter_flag)
             dispatcher.execute()
     elif args.debug == '0':
-        if not args.id:
-            uid = args.id
+        uid = args.id
+        if not '/' or '\\' in uid:
             if not args.filter:
                 filter_flag = args.filter
             else:
@@ -63,15 +64,13 @@ if __name__ == '__main__':
             print('crawling weibo from id {}'.format(uid))
             dispatcher = Dispatcher(id_file_path=None, mode='single', uid=uid, filter_flag=filter_flag)
             dispatcher.execute()
-
         else:
-            uid = DEFAULT_USER_ID
             if not args.filter:
                 filter_flag = args.filter
             else:
                 filter_flag = 0
-            print('crawling weibo from id {}'.format(uid))
-            dispatcher = Dispatcher(id_file_path='./id_file', mode='multi', uid=None, filter_flag=filter_flag)
+            print('crawling weibo from multi id file {}'.format(uid))
+            dispatcher = Dispatcher(id_file_path=uid, mode='multi', uid=None, filter_flag=filter_flag)
             dispatcher.execute()
     else:
         print('debug mode error, set 1 on, set 0 off.')

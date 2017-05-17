@@ -1,4 +1,95 @@
-![PicName](http://ofwzcunzi.bkt.clouddn.com/syITab2TLKfLVMnp.png)
+![PicName](http://ofwzcunzi.bkt.clouddn.com/j1Pdjm2viQOSCU52.png)
+
+# 迟来的更新
+
+这个项目从发起到现在过去了二十多天，五百年了终于得把事情真真正正干起来了！！这个项目会一直保持更新，为了方便contribute一起贡献，我重新发起了一个项目：https://github.com/jinfagang/weibo_terminator_workflow.git ， 如果想一起贡献爬取语料可以同时star一下workflow这个项目，如果想play with微博爬虫可以继续关注这个项目。
+
+
+# 2017-4-19 重磅更新！！！启动微博终结者计划(WT Plan)
+
+**weibo_terminator** 微博终结者爬虫基本上准备就绪：
+
+这次我们更新了以下功能：
+* 增加了延时策略，每次爬取10个页面，暂停五分钟，这样依旧不能百分百保证账号不被ban，但是我们还有策略！！
+* 现在我们同时使用十几个账号同时开爬了，weibo_scraper 会在一个账号被禁止之后自动切换到下一个账号！！
+* 不需要设置cookies！！！重要的事情说三遍，我们不需要在手动设置cookies了，只需要在accounts.py里面设置相应的账号，WT自动获取cookies，后面也可以设置更新，或者删掉cookies缓存手动更新；
+
+如果你认为只有这些你就图样图森破了，三木檀木子拿衣服。更重要的更新在于：
+
+* id不仅仅限于数字id了，一些明星大v的字母id照样爬，我们这次更新默认的id就是angelababy的微博，她的id为: `realangelababy`;
+* 作者完善了从微博内容对话格式提取聊天pair对的脚本， 对话的准确率在 **99%** 左右(consider copyright issue, we will open source it later)；
+* 作者提交了分门别类的近**800万用户**id的list，全网开爬(Consider weibo official limitations, we can't distributed all list, just for sample,
+join our contributor team we will give every contributor single and unique part of id_file.)；
+* 作者新增了**断点续爬**功能，这次更新我们的爬虫会记住上一次爬取到了哪个地方，第二次会直接从上一次中断的地方开始爬取，直到爬完整个微博，所以当你的cookies被ban了以后，直接换小号继续爬即可；
+* 所有工作将在半个月之内完成，构建的语料仅限于contributor使用，欢迎大家为WT贡献进来。
+
+为了基于庞大的微博网络，我们发起终结者计划，群策群力爬取微博中文计划语料，这次更新的repo中一个 `weibo_id.list` 文件，这里面有分门别类的近800万用户的id。
+不要问我怎么来的，接下来我们分配给每个contributor一定区间段的id，对全部微博进行爬取，然后把结果上传到我们内部的百度云网盘，所有数据只有所有的contributor以及
+weibo_terminator authors可以获取。
+最后声明以下，本项目参考了一些类似项目，但是本项目实现的功能，考虑的问题复杂度不是以上这些项目能比拟，我们实现的都是最新的网页API和Python3，很多其他项目都是基于scrapy构建的，本项目根本使用任何类似的爬虫库，
+不是别的原因，拿那些库构建的项目缺乏灵活性，我们不太喜欢。希望大家理解。
+
+最后依旧欢迎大家submit issue，我们永远开源，维护更新！！
+![automaticaly dispatch multi account](http://ofwzcunzi.bkt.clouddn.com/lPyRH7HuvBe1UE6g.png)
+
+Contribution tips：
+
+* Clone this repo: `git clone https://github.com/jinfagang/weibo_terminater.git`;
+* Install PhantomJS to enable weibo_terminator auto get cookies, from [here](http://phantomjs.org/download.html) get it
+and set your unzip path to `settings/config.py`, follow the instruction there;
+* Set your multi account, inside `settings/accounts.py`, you can using multi account now, terminator will
+automatically dispatch them;
+* Run `python3 main.py -i realangelababy`, scrap single user, set `settings/id_file` for multi user scrap;
+* Contact project administrator via wechat `jintianiloveu`, if you want contribute, administrator will hand out you
+and id_file which is unique in our project;
+* All data will saved into `./weibo_detail`, with different id separately.
+* Collect data to project administrator.
+* When all the work finished, administrator will distribute all data as one single file to all contributors. Using
+it under `WT & TIANEYE COPYRIGHT`.
+
+# Research & Discuss Group
+
+We fund several group for our project:
+```
+QQ
+AI智能自然语言处理: 476464663
+Tensorflow智能聊天Bot: 621970965
+GitHub深度学习开源交流: 263018023
+
+Wechat
+add administrator `jintianiloveu` to be added in.
+
+```
+
+# Tutorial
+
+这是第一次commit丢失的部分，使用帮助：
+
+```
+# -h see helps
+python3 main.py -h
+
+# -i specific an single id or id_file path(with every id as a line.)
+python3 main.py -i 167385960
+python3 main.py -i ./id_file
+
+# -f specific filter mode, if 0, all weibo are all original, if 1, contains repost one, default is 0
+python3 main.py -i 16758795 -f 0
+
+# -d specific debug mode for testing, be aware debug mode only support one single id.
+python3 main.py -i 178600077 -d 1
+```
+
+That's all, simple and easy.
+
+![PicName](http://ofwzcunzi.bkt.clouddn.com/ozuDldzgXY9lVFWx.png)
+# About cookies
+
+The cookies still maybe banned, if our scraper continues get information from weibo, that is exactly we have to get
+this job done under people's strength, no one can build such a big corpora under one single power.
+If your cookies out of date or being banned, we strongly recommended using another weibo account which can be your
+friends or anyone else, and continue scrap, one thing you have to remind is that **our weibo_terminator can remember
+scrap progress and it will scrap from where it stopped last time. :)**
 
 #  微博终结者爬虫
 
@@ -73,5 +164,5 @@ F
 
 # Copyright
 
- (c) 2017 Jin Fagang & Tianmu Inc.
+ (c) 2017 Jin Fagang & Tianmu Inc. & weibo_terminator authors
  LICENSE Apache 2.0
