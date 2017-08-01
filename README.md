@@ -1,5 +1,13 @@
 ![PicName](http://ofwzcunzi.bkt.clouddn.com/j1Pdjm2viQOSCU52.png)
 
+# 爬虫重构中
+
+博主最近身陷囹圄，穷苦不堪，为此耽搁了这个项目，但考虑到广大青少年对爬虫的需求，我决定近期对改项目进行重构，减少不必要的操作，简化流程，另外，之前在workflow版本召集众人集结了一批数据，也打算在近期开放出来，提供给NLP患者使用。北京地区的同志们不妨加个群：
+```
+ 292889553
+```
+另外，如果直接看到workflow版本，记得先看一下这里，按照这个安装好PhantomJS，不然无法自动获取cookies，并在settings下面设置好PhantomJS的可执行文件路径。
+
 # 迟来的更新
 
 这个项目从发起到现在过去了二十多天，五百年了终于得把事情真真正正干起来了！！这个项目会一直保持更新，为了方便contribute一起贡献，我重新发起了一个项目：https://github.com/jinfagang/weibo_terminator_workflow.git ， 如果想一起贡献爬取语料可以同时star一下workflow这个项目，如果想play with微博爬虫可以继续关注这个项目。
