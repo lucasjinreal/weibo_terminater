@@ -32,7 +32,7 @@ from tqdm import *
 import pickle
 
 from settings.accounts import accounts
-from settings.config import LOGIN_URL, PHANTOM_JS_PATH, COOKIES_SAVE_PATH
+from settings.config import LOGIN_URL, PHANTOM_JS_PATH, COOKIES_SAVE_PATH,CHROME_PATH
 
 
 def count_time():
@@ -42,11 +42,15 @@ def count_time():
 
 def get_cookie_from_network(account_id, account_password):
     url_login = LOGIN_URL
-    phantom_js_driver_file = os.path.abspath(PHANTOM_JS_PATH)
+    # phantom_js_driver_file = os.path.abspath(PHANTOM_JS_PATH)
+    # Selenium support for PhantomJS has been deprecated，so use chromerdriver.exe instead.
+    chromedriver_file = os.path.abspath(CHROMDRIVER_PATH)
     if os.path.exists(phantom_js_driver_file):
         try:
-            print('loading PhantomJS from {}'.format(phantom_js_driver_file))
-            driver = webdriver.PhantomJS(phantom_js_driver_file)
+            # print('loading PhantomJS from {}'.format(phantom_js_driver_file))
+            # driver = webdriver.PhantomJS(phantom_js_driver_file)
+            print('loading chromedriver from {}'.format(chromedriver_file))
+            driver = webdriver.Chrome(chromedriver_file)
             # must set window size or will not find element
             driver.set_window_size(1640, 688)
             driver.get(url_login)
@@ -61,6 +65,8 @@ def get_cookie_from_network(account_id, account_password):
             print('account password: {}'.format(account_password))
 
             driver.find_element_by_xpath('//a[@id="loginAction"]').click()
+            # Waiting some time for verification operation.If not, will be wrong during "  if 'SSOLoginState' in cookie_string: " command.
+            time.sleep(15);
         except InvalidElementStateException as e:
             print(e)
             print('error, account id {} is not valid, pass this account, you can edit it and then '
