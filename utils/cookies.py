@@ -32,7 +32,7 @@ from tqdm import *
 import pickle
 
 from settings.accounts import accounts
-from settings.config import LOGIN_URL, PHANTOM_JS_PATH, COOKIES_SAVE_PATH,CHROME_PATH
+from settings.config import LOGIN_URL, PHANTOM_JS_PATH, COOKIES_SAVE_PATH,CHROMEDRIVER_PATH
 
 
 def count_time():
