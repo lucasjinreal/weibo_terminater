@@ -32,3 +32,6 @@ PHANTOM_JS_PATH = '/Users/jintian/phantomjs-2.1.1-macosx/bin/phantomjs'
 
 
 COOKIES_SAVE_PATH = 'settings/cookies.pkl'
+
+#Selenium support for PhantomJS has been deprecated，so use chromerdriver.exe instead.
+CHROMEDRIVER_PATH = '/chromedriver_win32/chromedriver'
