@@ -108,5 +108,7 @@ def get_cookie_from_network(account_id, account_password):
             print(e)
 
     else:
-        print('can not find PhantomJS driver, please download from http://phantomjs.org/download.html based on your '
+        # print('can not find PhantomJS driver, please download from http://phantomjs.org/download.html based on your '
+        #      'system.')
+        print('can not find chromedriver, please download from http://chromedriver.chromium.org/downloads based on your '
               'system.')
