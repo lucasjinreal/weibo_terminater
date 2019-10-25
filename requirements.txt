@@ -1,0 +1,13 @@
+BeautifulSoup
+beautifulsoup4
+bson
+chardet
+gyp==0.1
+html5lib
+lxml
+pycrypto
+pymongo
+pytz
+selenium
+tqdm
+alfred-py

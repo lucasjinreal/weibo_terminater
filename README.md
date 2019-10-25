@@ -1,12 +1,24 @@
-![PicName](http://ofwzcunzi.bkt.clouddn.com/j1Pdjm2viQOSCU52.png)
+# Weibo Terminater
 
-# 爬虫重构中
+NLP语料准备工具，温馨提示，本项目仅作为学术研究使用，用于其他用途引发的一系列后果本作者不承担任何责任。大概两年过去了，再次更新一下这个项目，只是为了责任和信仰，本次更新如下：
 
-博主最近身陷囹圄，穷苦不堪，为此耽搁了这个项目，但考虑到广大青少年对爬虫的需求，我决定近期对改项目进行重构，减少不必要的操作，简化流程，另外，之前在workflow版本召集众人集结了一批数据，也打算在近期开放出来，提供给NLP患者使用。北京地区的同志们不妨加个群：
-```
- 292889553
-```
-另外，如果直接看到workflow版本，记得先看一下这里，按照这个安装好PhantomJS，不然无法自动获取cookies，并在settings下面设置好PhantomJS的可执行文件路径。
+- 添加了一些辅助库logging更好的显示信息，log库来自于alfred: http://github.com/jinfagang/alfred;
+- 将PhantomJS的driver废弃掉了，默认使用FireFox作为代理，这样导致的结果是你可能需要安装一下FireFox的selenium插件，叫做geckodriver，Google一下安装到`/usr/bin`里面即可；
+- 删除了一些不必要的文件。
+
+之前的图片链接好像都不能用了，直接删掉，只能说国内的云服务器商太坑爹太抠，不交钱直接断你的链接，也可能是大环境不好，该倒闭的都倒闭了。
+
+其实作者两年之后已经不搞NLP了，研究生毕业后从事了自动驾驶领域的相关工作，但一直没有放弃NLP工作的跟进也不妨碍我一直依赖对NLP的兴趣，为此特地给大家提供几个最新的有趣的干货：
+
+- 国内最大的AI算法市场：http://manaai.cn
+
+  ![](https://s2.ax1x.com/2019/10/25/Kdlzd0.png)
+
+  ![](https://s2.ax1x.com/2019/10/25/KdlbRg.png)
+
+- 关于问答系统的一些交流论坛：http://t.manaai.cn
+
+本项目会持续更新并维护，感谢大家的关注。
 
 # 迟来的更新
 
@@ -90,7 +102,6 @@ python3 main.py -i 178600077 -d 1
 
 That's all, simple and easy.
 
-![PicName](http://ofwzcunzi.bkt.clouddn.com/ozuDldzgXY9lVFWx.png)
 # About cookies
 
 The cookies still maybe banned, if our scraper continues get information from weibo, that is exactly we have to get
@@ -117,13 +128,10 @@ scrap progress and it will scrap from where it stopped last time. :)**
 # 为人工智能而生
 
 中文语料一直以来备受诟病，没有机构或者组织去建立一些公开的数据集，反观国外，英文语料相当丰富，而且已经做的非常精准。
-![PicName](http://ofwzcunzi.bkt.clouddn.com/KYQXBciecgxkNRxQ.png)
 
 微博语料作者认为是覆盖最广，最活跃最新鲜的语料，使用之构建对话系统不说模型是否精准，但新鲜的词汇量是肯定有的。
 
 # 爬取结果
-
-![PicName](http://ofwzcunzi.bkt.clouddn.com/4eyibrFkmJdMuVJ2.png)
 
 指定用户的微博和评论形式如下：
 
